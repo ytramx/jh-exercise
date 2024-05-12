@@ -1,0 +1,7 @@
+*.Development.json
+bin/
+obj/
+*.suo
+*.vsidx
+.vs/
+*.csproj.user
