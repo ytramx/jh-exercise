@@ -103,15 +103,15 @@ namespace redditpoller.application.Sample.Commands
                     return false;
                 }
 
-                if(this.redditService.SubredditExists(command.SubredditName) == false)
-                {
-                    result.InvalidSubreddit = true;
-                    return false;
-                }
-
                 if(command.Duration < Constants.MinSampleDuration || command.Duration > Constants.MaxSampleDuration)
                 {
                     result.InvalidDuration = true;
+                    return false;
+                }
+
+                if (this.redditService.SubredditExists(command.SubredditName) == false)
+                {
+                    result.InvalidSubreddit = true;
                     return false;
                 }
 

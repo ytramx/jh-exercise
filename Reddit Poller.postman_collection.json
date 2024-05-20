@@ -1,0 +1,954 @@
+{
+	"info": {
+		"_postman_id": "7862e291-92e9-4612-a097-fc7d11f221c6",
+		"name": "Reddit Poller",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8746046"
+	},
+	"item": [
+		{
+			"name": "Reddit Direct",
+			"item": [
+				{
+					"name": "Password Grant",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{RedditAppSecret}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{RedditAppId}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{RedditUsername}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{RedditUserPassword}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://www.reddit.com/api/v1/access_token",
+							"protocol": "https",
+							"host": [
+								"www",
+								"reddit",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"access_token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CreateSamples",
+			"item": [
+				{
+					"name": "400 - Duration too long",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(400);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('sampleId');\r",
+									"    pm.expect(responseData).to.have.property('success');\r",
+									"    pm.expect(responseData).to.have.property('conflict');\r",
+									"    pm.expect(responseData).to.have.property('invalidSampleId');\r",
+									"    pm.expect(responseData).to.have.property('invalidSubreddit');\r",
+									"    pm.expect(responseData).to.have.property('invalidDuration');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"SampleId is a non-empty string\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.sampleId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"SampleId should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Success is false and invalidDuration is true\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData.success).to.equal(false);\r",
+									"  pm.expect(responseData.invalidDuration).to.equal(true);  \r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Conflict, invalidSampleId, invalidSubreddit, and invalidDuration are boolean values\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.conflict).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidSampleId).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidSubreddit).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidDuration).to.be.a('boolean');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"duration\" : 601,\r\n    \"subredditName\" : \"askreddit\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7040/api/sample/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7040",
+							"path": [
+								"api",
+								"sample",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 - Duration too long Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(400);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('sampleId');\r",
+									"    pm.expect(responseData).to.have.property('success');\r",
+									"    pm.expect(responseData).to.have.property('conflict');\r",
+									"    pm.expect(responseData).to.have.property('invalidSampleId');\r",
+									"    pm.expect(responseData).to.have.property('invalidSubreddit');\r",
+									"    pm.expect(responseData).to.have.property('invalidDuration');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"SampleId is a non-empty string\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.sampleId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"SampleId should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Success is false and invalidDuration is true\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData.success).to.equal(false);\r",
+									"  pm.expect(responseData.invalidDuration).to.equal(true);  \r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Conflict, invalidSampleId, invalidSubreddit, and invalidDuration are boolean values\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.conflict).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidSampleId).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidSubreddit).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidDuration).to.be.a('boolean');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"duration\" : 601,\r\n    \"subredditName\" : \"askreddit\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7040/api/sample/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7040",
+							"path": [
+								"api",
+								"sample",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 - Duration too short",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(400);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('sampleId');\r",
+									"    pm.expect(responseData).to.have.property('success');\r",
+									"    pm.expect(responseData).to.have.property('conflict');\r",
+									"    pm.expect(responseData).to.have.property('invalidSampleId');\r",
+									"    pm.expect(responseData).to.have.property('invalidSubreddit');\r",
+									"    pm.expect(responseData).to.have.property('invalidDuration');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"SampleId is a non-empty string\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.sampleId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"SampleId should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Success is false and invalidDuration is true\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData.success).to.equal(false);\r",
+									"  pm.expect(responseData.invalidDuration).to.equal(true);  \r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Conflict, invalidSampleId, invalidSubreddit, and invalidDuration are boolean values\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.conflict).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidSampleId).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidSubreddit).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidDuration).to.be.a('boolean');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"duration\" : 10,\r\n    \"subredditName\" : \"askreddit\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7040/api/sample/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7040",
+							"path": [
+								"api",
+								"sample",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 - Subreddit doesn't exist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(400);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('sampleId');\r",
+									"    pm.expect(responseData).to.have.property('success');\r",
+									"    pm.expect(responseData).to.have.property('conflict');\r",
+									"    pm.expect(responseData).to.have.property('invalidSampleId');\r",
+									"    pm.expect(responseData).to.have.property('invalidSubreddit');\r",
+									"    pm.expect(responseData).to.have.property('invalidDuration');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"SampleId is a non-empty string\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.sampleId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"SampleId should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Success is false and invalidSubreddit is true\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData.success).to.equal(false);\r",
+									"  pm.expect(responseData.invalidSubreddit).to.equal(true);  \r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Conflict, invalidSampleId, invalidSubreddit, and invalidDuration are boolean values\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.conflict).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidSampleId).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidSubreddit).to.be.a('boolean');\r",
+									"    pm.expect(responseData.invalidDuration).to.be.a('boolean');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"duration\" : 30,\r\n    \"subredditName\" : \"definitelydoesntexisthopefullynever1234asdf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7040/api/sample/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7040",
+							"path": [
+								"api",
+								"sample",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "201 - Happy Path",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test for the response status code\r",
+									"pm.test(\"Response status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"// Test for the existence of properties in the response\r",
+									"pm.test(\"Response is an object with specific properties\", function () {\r",
+									"    pm.expect(pm.response.json()).to.be.an('object').that.has.all.keys('sampleId', 'success', 'conflict', 'invalidSampleId', 'invalidSubreddit', 'invalidDuration');\r",
+									"});\r",
+									"\r",
+									"// Test for the values of individual properties\r",
+									"pm.test(\"Properties have expected boolean values\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.be.a('boolean');\r",
+									"    pm.expect(jsonData.conflict).to.be.a('boolean');\r",
+									"    pm.expect(jsonData.invalidSampleId).to.be.a('boolean');\r",
+									"    pm.expect(jsonData.invalidSubreddit).to.be.a('boolean');\r",
+									"    pm.expect(jsonData.invalidDuration).to.be.a('boolean');\r",
+									"});\r",
+									"\r",
+									"// Test to check if the 'success' property in the response is true\r",
+									"pm.test(\"The 'success' property in the response is true\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.be.true;\r",
+									"});\r",
+									"// Test to check if the response contains a 'Location' header\r",
+									"pm.test(\"Valid 'Location' header is present\", function() {\r",
+									"    pm.response.to.have.header('Location');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"duration\" : 30,\r\n    \"subreddit\" : \"askreddit\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7040/api/sample/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7040",
+							"path": [
+								"api",
+								"sample",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GetSample",
+			"item": [
+				{
+					"name": "404 - Sample not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"  pm.response.to.have.status(404);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7040/api/sample/sampleneverfound",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7040",
+							"path": [
+								"api",
+								"sample",
+								"sampleneverfound"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "201 - Happy Path Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test for the response status code\r",
+									"pm.test(\"Response status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"// Test for the existence of properties in the response\r",
+									"pm.test(\"Response is an object with specific properties\", function () {\r",
+									"    pm.expect(pm.response.json()).to.be.an('object').that.has.all.keys('sampleId', 'success', 'conflict', 'invalidSampleId', 'invalidSubreddit', 'invalidDuration');\r",
+									"});\r",
+									"\r",
+									"// Test for the values of individual properties\r",
+									"pm.test(\"Properties have expected boolean values\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.be.a('boolean');\r",
+									"    pm.expect(jsonData.conflict).to.be.a('boolean');\r",
+									"    pm.expect(jsonData.invalidSampleId).to.be.a('boolean');\r",
+									"    pm.expect(jsonData.invalidSubreddit).to.be.a('boolean');\r",
+									"    pm.expect(jsonData.invalidDuration).to.be.a('boolean');\r",
+									"});\r",
+									"\r",
+									"// Test to check if the 'success' property in the response is true\r",
+									"pm.test(\"The 'success' property in the response is true\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.success).to.be.true;\r",
+									"});\r",
+									"// Test to capture the Location header and store it in a collection variable\r",
+									"pm.test(\"Capture and store the Location header in a collection variable\", function () {\r",
+									"    pm.collectionVariables.set(\"_pathToNewSample\", pm.response.headers.get(\"Location\"));\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"duration\" : 30,\r\n    \"subreddit\" : \"askreddit\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7040/api/sample/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7040",
+							"path": [
+								"api",
+								"sample",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200 - Get Incomplete Sample Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test for the HTTP status code\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Test for the existence of properties in the response\r",
+									"pm.test(\"Response body has the required properties\", function () {\r",
+									"    var responseJSON = pm.response.json();\r",
+									"    pm.expect(responseJSON).to.have.property('subredditName');\r",
+									"    pm.expect(responseJSON).to.have.property('duration');\r",
+									"    pm.expect(responseJSON).to.have.property('sampleId');\r",
+									"    pm.expect(responseJSON).to.have.property('startTime');\r",
+									"    pm.expect(responseJSON).to.have.property('endTime');\r",
+									"    pm.expect(responseJSON).to.have.property('completed');\r",
+									"    pm.expect(responseJSON).to.have.property('totalSamplesCompleted');\r",
+									"    pm.expect(responseJSON).to.have.property('sampleAnalysis');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Completed property should be false\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.have.property('completed', false);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"EndTime property should be null\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.endTime).to.be.null;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{_pathToNewSample}}",
+							"host": [
+								"{{_pathToNewSample}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chained Requests with Timings",
+			"item": [
+				{
+					"name": "Happy Path - Create then Query Before Complete",
+					"item": [
+						{
+							"name": "201 - Happy Path",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Test for the response status code\r",
+											"pm.test(\"Response status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"// Test for the existence of properties in the response\r",
+											"pm.test(\"Response is an object with specific properties\", function () {\r",
+											"    pm.expect(pm.response.json()).to.be.an('object').that.has.all.keys('sampleId', 'success', 'conflict', 'invalidSampleId', 'invalidSubreddit', 'invalidDuration');\r",
+											"});\r",
+											"\r",
+											"// Test for the values of individual properties\r",
+											"pm.test(\"Properties have expected boolean values\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.be.a('boolean');\r",
+											"    pm.expect(jsonData.conflict).to.be.a('boolean');\r",
+											"    pm.expect(jsonData.invalidSampleId).to.be.a('boolean');\r",
+											"    pm.expect(jsonData.invalidSubreddit).to.be.a('boolean');\r",
+											"    pm.expect(jsonData.invalidDuration).to.be.a('boolean');\r",
+											"});\r",
+											"\r",
+											"// Test to check if the 'success' property in the response is true\r",
+											"pm.test(\"The 'success' property in the response is true\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.be.true;\r",
+											"});\r",
+											"// Test to capture the Location header and store it in a collection variable\r",
+											"pm.test(\"Capture and store the Location header in a collection variable\", function () {\r",
+											"    pm.collectionVariables.set(\"_pathToNewSample\", pm.response.headers.get(\"Location\"));\r",
+											"});\r",
+											"\r",
+											"// Test to pause for 8 seconds after finishing the request\r",
+											"pm.test(\"Pause for 15 seconds after finishing the request\", function () {\r",
+											"    pm.expect(true, \"This test is to pause for 15 seconds after finishing the request\").to.be.true;\r",
+											"    setTimeout(function(){}, 15000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"duration\" : 30,\r\n    \"subreddit\" : \"askreddit\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:7040/api/sample/",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7040",
+									"path": [
+										"api",
+										"sample",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200 - Get Incomplete Sample",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Test for the HTTP status code\r",
+											"pm.test(\"Response status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Test for the existence of properties in the response\r",
+											"pm.test(\"Response body has the required properties\", function () {\r",
+											"    var responseJSON = pm.response.json();\r",
+											"    pm.expect(responseJSON).to.have.property('subredditName');\r",
+											"    pm.expect(responseJSON).to.have.property('duration');\r",
+											"    pm.expect(responseJSON).to.have.property('sampleId');\r",
+											"    pm.expect(responseJSON).to.have.property('startTime');\r",
+											"    pm.expect(responseJSON).to.have.property('endTime');\r",
+											"    pm.expect(responseJSON).to.have.property('completed');\r",
+											"    pm.expect(responseJSON).to.have.property('totalSamplesCompleted');\r",
+											"    pm.expect(responseJSON).to.have.property('sampleAnalysis');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Completed property should be false\", function () {\r",
+											"    const responseData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(responseData).to.have.property('completed', false);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"EndTime property should be null\", function () {\r",
+											"    const responseData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(responseData.endTime).to.be.null;\r",
+											"});\r",
+											"\r",
+											"// Test for the existence of properties in the sampleAnalysis object\r",
+											"pm.test(\"SampleAnalysis object has the required properties\", function () {\r",
+											"    var sampleAnalysis = pm.response.json().sampleAnalysis;\r",
+											"    pm.expect(sampleAnalysis).to.have.property('maxUpvotes');\r",
+											"    pm.expect(sampleAnalysis).to.have.property('mostUpvotedPosts');\r",
+											"    pm.expect(sampleAnalysis).to.have.property('maxPostCount');\r",
+											"    pm.expect(sampleAnalysis).to.have.property('prolificAuthors');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{_pathToNewSample}}",
+									"host": [
+										"{{_pathToNewSample}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Happy Path - Create then Query After Complete",
+					"item": [
+						{
+							"name": "201 - Happy Path",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Test for the response status code\r",
+											"pm.test(\"Response status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"// Test for the existence of properties in the response\r",
+											"pm.test(\"Response is an object with specific properties\", function () {\r",
+											"    pm.expect(pm.response.json()).to.be.an('object').that.has.all.keys('sampleId', 'success', 'conflict', 'invalidSampleId', 'invalidSubreddit', 'invalidDuration');\r",
+											"});\r",
+											"\r",
+											"// Test for the values of individual properties\r",
+											"pm.test(\"Properties have expected boolean values\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.be.a('boolean');\r",
+											"    pm.expect(jsonData.conflict).to.be.a('boolean');\r",
+											"    pm.expect(jsonData.invalidSampleId).to.be.a('boolean');\r",
+											"    pm.expect(jsonData.invalidSubreddit).to.be.a('boolean');\r",
+											"    pm.expect(jsonData.invalidDuration).to.be.a('boolean');\r",
+											"});\r",
+											"\r",
+											"// Test to check if the 'success' property in the response is true\r",
+											"pm.test(\"The 'success' property in the response is true\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.be.true;\r",
+											"});\r",
+											"// Test to capture the Location header and store it in a collection variable\r",
+											"pm.test(\"Capture and store the Location header in a collection variable\", function () {\r",
+											"    pm.collectionVariables.set(\"_pathToNewSample\", pm.response.headers.get(\"Location\"));\r",
+											"});\r",
+											"\r",
+											"// Test to pause for 8 seconds after finishing the request\r",
+											"pm.test(\"Pause for 45 seconds after finishing the request\", function () {\r",
+											"    pm.expect(true, \"This test is to pause for 45 seconds after finishing the request\").to.be.true;\r",
+											"    setTimeout(function(){}, 45000);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"duration\" : 30,\r\n    \"subreddit\" : \"askreddit\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:7040/api/sample/",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7040",
+									"path": [
+										"api",
+										"sample",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200 - Get Complete Sample",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Test for the HTTP status code\r",
+											"pm.test(\"Response status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"// Test for the existence of properties in the response\r",
+											"pm.test(\"Response body has the required properties\", function () {\r",
+											"    var responseJSON = pm.response.json();\r",
+											"    pm.expect(responseJSON).to.have.property('subredditName');\r",
+											"    pm.expect(responseJSON).to.have.property('duration');\r",
+											"    pm.expect(responseJSON).to.have.property('sampleId');\r",
+											"    pm.expect(responseJSON).to.have.property('startTime');\r",
+											"    pm.expect(responseJSON).to.have.property('endTime');\r",
+											"    pm.expect(responseJSON).to.have.property('completed');\r",
+											"    pm.expect(responseJSON).to.have.property('totalSamplesCompleted');\r",
+											"    pm.expect(responseJSON).to.have.property('sampleAnalysis');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Completed property should be true\", function () {\r",
+											"    const responseData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(responseData).to.have.property('completed', true);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"EndTime property should be non-null\", function () {\r",
+											"    const responseData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(responseData.endTime).to.not.be.null;\r",
+											"});\r",
+											"\r",
+											"// Test for the existence of properties in the sampleAnalysis object\r",
+											"pm.test(\"SampleAnalysis object has the required properties\", function () {\r",
+											"    var sampleAnalysis = pm.response.json().sampleAnalysis;\r",
+											"    pm.expect(sampleAnalysis).to.have.property('maxUpvotes');\r",
+											"    pm.expect(sampleAnalysis).to.have.property('mostUpvotedPosts');\r",
+											"    pm.expect(sampleAnalysis).to.have.property('maxPostCount');\r",
+											"    pm.expect(sampleAnalysis).to.have.property('prolificAuthors');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{_pathToNewSample}}",
+									"host": [
+										"{{_pathToNewSample}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "_sampleId",
+			"value": ""
+		},
+		{
+			"key": "_pathToNewSample",
+			"value": ""
+		}
+	]
+}

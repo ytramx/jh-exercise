@@ -13,7 +13,7 @@ namespace redditpoller.application.Services
     /// </summary>
     public class RedditService : IRedditService
     {
-        private readonly ConcurrentBag<SampleRequest> pendingRequests;
+        private readonly ConcurrentQueue<SampleRequest> pendingRequests;
         private readonly RedditClient redditClient;
         private readonly IPersistenceService persistenceService;
         private readonly PollingConfiguration pollingConfig;
@@ -29,7 +29,7 @@ namespace redditpoller.application.Services
             IPersistenceService persistenceService, 
             IOptionsMonitor<PollingConfiguration> pollOptionsMonitor)
         {
-            pendingRequests = new ConcurrentBag<SampleRequest>();
+            pendingRequests = new ConcurrentQueue<SampleRequest>();
             this.redditClient = redditClient;
             this.persistenceService = persistenceService;
             this.pollingConfig = pollOptionsMonitor.CurrentValue;
@@ -55,7 +55,7 @@ namespace redditpoller.application.Services
                 throw new SampleIdConflictException(request.SampleId);
             }
 
-            pendingRequests.Add(request);
+            pendingRequests.Enqueue(request);
             return;
         }
 
@@ -66,7 +66,8 @@ namespace redditpoller.application.Services
         /// <returns>SampleRequest or null if it does not exist.</returns>
         public SampleRequest GetRequest(string sampleId)
         {
-            if(this.pendingRequests.TryPeek(out var request))
+            var request = this.pendingRequests.FirstOrDefault(r => r.SampleId == sampleId);
+            if(request != null)
             {
                 return request;
             }
@@ -82,6 +83,17 @@ namespace redditpoller.application.Services
         /// <returns>True if exists, false otherwise</returns>
         public bool SubredditExists(string sub)
         {
+            return this.SubredditExistsInternal(sub);
+        }
+
+        /// <summary>
+        /// A recursive subreddit search that allows for multiple attempts if a specific exception occurs.
+        /// </summary>
+        /// <param name="sub">Name of subreddit</param>
+        /// <param name="attempt">Attempt number</param>
+        /// <returns>True if exists, false otherwise</returns>
+        private bool SubredditExistsInternal(string sub, int attempt = 0)
+        {
             try
             {
                 var test = this.redditClient.SearchSubredditNames(sub, exact: true);
@@ -90,6 +102,18 @@ namespace redditpoller.application.Services
             catch (RedditNotFoundException)
             {
                 return false;
+            }
+            catch(RedditNoResponseException)
+            {
+                attempt++;
+                if(attempt <= Constants.MaxRetries)
+                {
+                    return SubredditExistsInternal(sub, attempt);
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
 
@@ -163,7 +187,7 @@ namespace redditpoller.application.Services
             request.ReplacePostData(finalizedPosts);
             this.persistenceService.SaveSample(request);
 
-            this.pendingRequests.TryTake(out request);
+            this.pendingRequests.TryDequeue(out request);
         }
     }
 }

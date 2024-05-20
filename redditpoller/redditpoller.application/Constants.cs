@@ -19,5 +19,10 @@
         /// Base URL for reddit that will be used to create fully qualified URLs to reddit posts.
         /// </summary>
         public static readonly string RedditBaseUrl = "https://www.reddit.com";
+
+        /// <summary>
+        /// Max retries for reddit API access.
+        /// </summary>
+        public static readonly int MaxRetries = 5;
     }
 }
