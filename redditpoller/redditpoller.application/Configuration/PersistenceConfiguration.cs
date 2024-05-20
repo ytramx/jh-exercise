@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace redditpoller.application.Sample.Commands
+namespace redditpoller.application.Configuration
 {
-    internal class DeleteSample
+    public class PersistenceConfiguration
     {
+        public string SaveLocation { get; set; }
     }
 }

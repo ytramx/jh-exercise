@@ -19,4 +19,8 @@
     <ProjectReference Include="..\redditpoller.application\redditpoller.application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
